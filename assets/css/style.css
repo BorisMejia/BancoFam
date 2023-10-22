@@ -10,12 +10,12 @@ body {
     align-items: center;
     background-color: #78D6C6;
 }
-/* Diseño del login */
+/* Diseño del contenedor del login y registro */
 .container {
     position: relative;
     max-width: 470px;
     width: 100%;
-    border-radius: 12px;
+    border-radius: 15px;
     padding: 20px 30px 120px;
     background-color: #12486B;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 01);
@@ -24,7 +24,7 @@ body {
 
 /* Forma header login */
 .container-login header{
-    font-size: 30px;
+    font-size: 42px;
     text-align: center;
     color: white;
     font-weight: 600;

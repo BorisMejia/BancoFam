@@ -1,44 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
     <title>Banco Familiar</title>
-    <link rel="shortcut icon" href="./assets/img/Banco Fam (1).png">
+    <link rel="shortcut icon" href="./assets/img/logo.png">
 </head>
+
 <body>
 
-    <section class="container">
+    <section class="container" id="container">
         <div class="container-login">
             <header>Registrarse</header>
-            <form action="#">
+            <form action="#" id="registro">
                 <input type="text" id="name-user" placeholder="Nombre usuario:" required>
-                <input type="email"  id="email-registro" placeholder="Correo electronico:" required>
-                <input type="password" id="pass-registro" placeholder="Contraseña:" required>
-                <input type="submit" value="Registrarse">
+                <input type="email" id="email-registro" placeholder="Correo electronico:" required>
+                <input type="password" id="pass-registro" placeholder="Contraseña: Minimo 8 caracteres y una mayuscula" required>
+                <input type="password" id="pass-confirmacion" placeholder="Confirmar Contraseña:" required>
+                <input type="submit" id="btnRegistrar" value="Registrarse">
             </form>
         </div>
         <div class="container-registro">
             <header>Iniciar sesión</header>
-            <form action="#">
+            <form action="#" id="login">
                 <input type="email" id="email-login" placeholder="Correo electronico:" required>
-                <input type="password" id="pass-login" placeholder="Contraseña:" required>
+                <input type="password" id="pass-login" placeholder="Contraseña: Minimo 8 caracteres y una mayuscula" required>
                 <a href="#">¿Olvidaste la Contraseña?</a>
-                <input type="submit" value="Iniciar sesión">
+                <input type="submit" id="btnIniciar" value="Iniciar sesión">
             </form>
-        </div>    
+        </div>
     </section>
-    <div id="main-menu" style="display: none;">
-        <h1>Bienvenido A Tu Cajero Electrónico</h1>
-        <button id="check-balance">Consultar Saldo</button>
-        <button id="withdraw">Retirar Dinero</button>
-        <button id="transfer">Transferir Cuenta</button>
-        <button id="deposit">Consignar Dinero</button>
-        <button id="show-transactions">Historial de Transacciones</button>
-        <button id="logout">Cerrar Sesión</button>
+
+    <div class="main-menu" id="main-menu" style="display: none;">
+        <div class="container-opciones">
+            <div class="container-titulo">
+                <h1>Bienvenido</h1>
+            </div>
+            <div class="btn-class">
+                <button id="check-balance">Consultar Saldo</button>
+                <button id="withdraw">Retirar Dinero</button>
+                <button id="transfer">Transferir Dinero</button>
+                <button id="deposit">Consignar Dinero</button>
+                <button id="show-transactions">Historial de Transacciones</button>
+                <button id="logout">Cerrar Sesión</button>
+            </div>
+        </div>
     </div>
-       
+
+    <div id="saldo-container" class="opciones-container" style="display: none;">
+        <div class="container-img">
+            <img src="assets/img/banco.png" alt="">
+        </div>
+        <p>Nombre de usuario: <span id="nombre-usuario"></span></p>
+        <p>Saldo actual: <span id="saldo-actual"></span></p>
+        <div class="centrar-boton">
+            <button id="volver-main-menu">Volver al Menú Principal</button>
+        </div>
+    </div>
+    <div id="retiro-real" class="opciones-container" style="display: none;">
+        <div class="container-img">
+            <img src="assets/img/retirar.png" alt="">
+        </div>
+        <p>Ingrese la cantidad a retirar:</p>
+        <input type="number" id="retiro-amount">
+        <button id="realizar-retiro">Realizar Retiro</button>
+        <button id="cancelar-retiro">Cancelar</button>
+    </div>
+    <div id="transfer-div" class="opciones-container" style="display: none;">
+        <div class="container-img">
+            <img src="assets/img/trasferir.png" alt="">
+        </div>
+        <p>Transferir dinero a:</p>
+        <input type="email" id="destinatario-input" placeholder="Correo del destinatario" required>
+        <input type="number" id="monto-transferido-input" placeholder="Monto a transferir" required>
+        <button id="realizar-transferencia">Realizar Transferencia</button>
+        <button id="cancelar-transferencia">Cancelar</button>
+    </div>
+
+    <div id="comprobante-transferencia" class="opciones-container" style="display: none;">
+        <div class="container-img">
+            <img src="assets/img/factura.png" alt="">
+        </div>
+        <p>Transferencia realizada:</p>
+        <p>Destinatario: <span id="destinatario"></span></p>
+        <p>Monto transferido: <span id="monto-transferido"></span></p>
+        <button id="volver-main-menu-comprobante">Volver al Menú Principal</button>
+    </div>
+
+    <div id="consignar-div" class="opciones-container" style="display: none;">
+        <div class="container-img">
+            <img src="assets/img/consignar.png" alt="">
+        </div>
+        <p>Consignar dinero:</p>
+        <input type="number" id="monto-consignacion" placeholder="Monto a consignar" required>
+        <button id="realizar-consignacion">Realizar Consignación</button>
+        <button id="cancelar-consignacion">Cancelar</button>
+    </div>
+
+
+    <div class="container-lista" id="historial-container" style="display: none;">
+
+        <!-- Aquí se mostrarán los movimientos -->
+
+    </div>
+
+
     <script src="assets/js/script.js"></script>
 </body>
+
 </html>

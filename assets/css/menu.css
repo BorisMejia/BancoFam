@@ -1,0 +1,166 @@
+
+.main-menu {
+    display: block;
+    text-align: center;
+    background-color: #F5FCCD;
+    padding: 30px; /* Aumenta el espacio alrededor del menú */
+    border: 1px solid #ccc;
+    border-radius: 30px; /* Aumenta el radio de borde para hacerlo más suave */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    width: 450px; /* Aumenta el ancho del menú */
+    margin: 0 auto;
+}
+
+.container-opciones {
+    margin-top: 30px; /* Aumenta el espacio entre el título y los botones */
+}
+
+.container-titulo h1 {
+    font-size: 28px; /* Aumenta el tamaño de fuente del título */
+    margin-bottom: 20px;
+}
+
+.btn-class button {
+    display: block;
+    width: 100%;
+    padding: 15px; /* Aumenta el relleno de los botones */
+    margin-bottom: 15px; /* Aumenta el espacio entre los botones */
+    font-size: 16px; /* Aumenta el tamaño de fuente de los botones */
+    background-color: #419197;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-class button:hover {
+    background-color: #0056b3;
+}
+/*Estilos para mostrar el saldo*/
+.saldo-container {
+    background-color: #F5FCCD;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+}
+
+.saldo-container p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.saldo-container span {
+    font-weight: bold;
+}
+
+/* diseño del historial */
+#historial-container {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    max-height: 300px;
+    overflow-y: auto; /* Agregar una barra de desplazamiento vertical si el contenido es demasiado largo */
+}
+
+/* Estilos para los elementos del historial */
+#historial-list div {
+    margin: 5px 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.container-lista {
+    position: relative;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 15px;
+    padding: 20px 30px 120px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 01);
+    
+}
+
+/* En tu archivo de hoja de estilos CSS */
+.titulo-historial {
+    text-align: center; 
+    padding: 10px 0; 
+    background-color: #F5FCCD; 
+    font-weight: bold; 
+    margin-bottom: 20px;
+}
+.centrar-boton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ajusta la altura según tus necesidades */
+    margin-top: 20px;
+}
+/* Estilos para el botón en el historial */
+.boton-historial {
+    background-color: #12486B; /* Color de fondo */
+    color: #FFFFFF; /* Color del texto */
+    font-size: 16px; /* Tamaño de fuente */
+    padding: 10px 20px; /* Relleno */
+    border: none;
+    cursor: pointer; /* Cambiar el cursor al pasar por encima */
+}
+
+.boton-historial:hover {
+    background-color: #78D6C6; /* Cambio de color de fondo al pasar por encima */
+   
+}
+
+#historial-container{
+    margin-top: 20px;
+    background-color: #419197;  
+}
+/* estilos para opciones container */
+.opciones-container {
+    background-color: #F5FCCD; /* Color de fondo */
+    padding: 20px; /* Espaciado interior */
+    border: 1px solid #ddd; /* Borde con color gris claro */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 01);
+}
+
+.opciones-container button {
+    background-color: #3498db; /* Color de fondo para los botones */
+    color: #fff; /* Color del texto de los botones */
+    padding: 10px 20px; /* Espaciado interior de los botones */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre los botones */
+    margin-right: 10px; /* Margen derecho entre los botones */
+}
+
+.opciones-container button:hover {
+    background-color: #2980b9; /* Color de fondo al pasar el cursor sobre los botones */
+}
+
+.opciones-container button:last-child {
+    margin-right: 0; /* Eliminar el margen derecho para el último botón */
+}
+.opciones-container input[type="text"],
+.opciones-container input[type="number"],
+.opciones-container input[type="email"] {
+    padding: 10px; /* Aumentar el espaciado interno de los input */
+    width: 250px; /* Hacer que los input ocupen el ancho completo del contenedor */
+}
+.opciones-container p {
+    font-size: 20px; /* Aumentar el tamaño de la letra a 16px (ajusta el valor según tus preferencias) */
+    font-weight: bold;
+}
+.opciones-container img{
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 35px;
+}
+/* diseño de las imagenes en los botones */
+.container-img{
+    display: flex;
+    justify-content: center;
+    
+}
+
