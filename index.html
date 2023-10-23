@@ -20,6 +20,7 @@
                 <input type="email" id="email-registro" placeholder="Correo electronico:" required>
                 <input type="password" id="pass-registro" placeholder="Contraseña: Minimo 8 caracteres y una mayuscula" required>
                 <input type="password" id="pass-confirmacion" placeholder="Confirmar Contraseña:" required>
+                <input type="number" id="monto-apertura" placeholder="Monto de apertura (mínimo 100,000):" required>
                 <input type="submit" id="btnRegistrar" value="Registrarse">
             </form>
         </div>
@@ -34,7 +35,7 @@
         </div>
     </section>
 
-    <div class="main-menu" id="main-menu" style="display: none;">
+    <section class="main-menu" id="main-menu" style="display: none;">
         <div class="container-opciones">
             <div class="container-titulo">
                 <h1>Bienvenido</h1>
@@ -48,13 +49,13 @@
                 <button id="logout">Cerrar Sesión</button>
             </div>
         </div>
-    </div>
+    </section>
 
     <div id="saldo-container" class="opciones-container" style="display: none;">
         <div class="container-img">
             <img src="assets/img/banco.png" alt="">
         </div>
-        <p>Nombre de usuario: <span id="nombre-usuario"></span></p>
+        <p>Usuario: <span id="nombre-usuario"></span></p>
         <p>Saldo actual: <span id="saldo-actual"></span></p>
         <div class="centrar-boton">
             <button id="volver-main-menu">Volver al Menú Principal</button>
