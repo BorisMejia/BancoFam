@@ -18,7 +18,8 @@
             <form action="#" id="registro">
                 <input type="text" id="name-user" placeholder="Nombre usuario:" required>
                 <input type="email" id="email-registro" placeholder="Correo electronico:" required>
-                <input type="password" id="pass-registro" placeholder="Contraseña: Minimo 8 caracteres y una mayuscula" required>
+                <input type="password" id="pass-registro" placeholder="Contraseña: Minimo 8 caracteres y una mayuscula"
+                    required>
                 <input type="password" id="pass-confirmacion" placeholder="Confirmar Contraseña:" required>
                 <input type="number" id="monto-apertura" placeholder="Monto de apertura (mínimo 100,000):" required>
                 <input type="submit" id="btnRegistrar" value="Registrarse">
@@ -28,7 +29,8 @@
             <header>Iniciar sesión</header>
             <form action="#" id="login">
                 <input type="email" id="email-login" placeholder="Correo electronico:" required>
-                <input type="password" id="pass-login" placeholder="Contraseña: Minimo 8 caracteres y una mayuscula" required>
+                <input type="password" id="pass-login" placeholder="Contraseña: Minimo 8 caracteres y una mayuscula"
+                    required>
                 <a href="#">¿Olvidaste la Contraseña?</a>
                 <input type="submit" id="btnIniciar" value="Iniciar sesión">
             </form>
@@ -38,7 +40,7 @@
     <section class="main-menu" id="main-menu" style="display: none;">
         <div class="container-opciones">
             <div class="container-titulo">
-                <h1>Bienvenido</h1>
+                <h1>Bienvenido a la familia</h1>
             </div>
             <div class="btn-class">
                 <button id="check-balance">Consultar Saldo</button>
@@ -70,6 +72,16 @@
         <button id="realizar-retiro">Realizar Retiro</button>
         <button id="cancelar-retiro">Cancelar</button>
     </div>
+    <div id="comprobante-retiro" class="opciones-container" style="display: none;">
+        <div class="container-img">
+            <img src="assets/img/factura.png" alt="">
+        </div>
+        <p>Retiro realizado:</p>
+        <p>Monto retirado: <span id="monto-retirado"></span></p>
+        <div class="centrar-boton">
+            <button id="volver-main-menu-comprobante-retiro">Volver al Menú Principal</button>
+        </div>
+    </div>
     <div id="transfer-div" class="opciones-container" style="display: none;">
         <div class="container-img">
             <img src="assets/img/trasferir.png" alt="">
@@ -100,14 +112,20 @@
         <button id="realizar-consignacion">Realizar Consignación</button>
         <button id="cancelar-consignacion">Cancelar</button>
     </div>
-
-
-    <div class="container-lista" id="historial-container" style="display: none;">
-
-        <!-- Aquí se mostrarán los movimientos -->
-
+    <div id="comprobante-consignacion" class="opciones-container" style="display: none;">
+        <div class="container-img">
+            <img src="assets/img/factura.png" alt="">
+        </div>
+        <p>Consignación realizada:</p>
+        <p>Monto consignado: $<span id="monto-consignado"></span></p>
+        <div class="centrar-boton">
+            <button id="volver-main-menu-comprobante-consignacion">Volver al Menú Principal</button>
+        </div>
     </div>
 
+    <div class="container-lista" id="historial-container" style="display: none;">
+        <!-- Aquí se mostrarán los movimientos -->
+    </div>
 
     <script src="assets/js/script.js"></script>
 </body>

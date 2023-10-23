@@ -10,6 +10,13 @@ body {
     align-items: center;
     background-color: #78D6C6;
 }
+/*
+     Paleta de colores
+    #12486B
+    #419197
+    #78D6C6
+    #F5FCCD
+*/
 /* Diseño del contenedor del login y registro */
 .container {
     position: relative;
