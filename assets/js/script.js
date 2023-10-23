@@ -1,4 +1,3 @@
-
 //Funcionalidad abrir y cerrar login 
 const contenedor = document.querySelector(".container"),
     loginHeader = document.querySelector(".container-login header")
@@ -28,6 +27,7 @@ const retiro = document.getElementById('retiro-real')
 const retiroAmountInput = document.getElementById('retiro-amount')
 const realizarRetiroBtn = document.getElementById('realizar-retiro')
 const cancelarRetiroBtn = document.getElementById('cancelar-retiro')
+const comprobanteRetiro = document.getElementById('comprobante-retiro')
 
 const transfer = document.getElementById('transfer-div')
 const realizarTransferenciaBtn = document.getElementById('realizar-transferencia')
@@ -44,7 +44,7 @@ const consignarDiv = document.getElementById('consignar-div');
 const realizarConsignacionBtn = document.getElementById('realizar-consignacion')
 const cancelarConsignacionBtn = document.getElementById('cancelar-consignacion')
 const montoConsignacionInput = document.getElementById('monto-consignacion')
-
+const comprobanteConsignacion = document.getElementById('comprobante-consignacion')
 
 const usuariosRegistrados = JSON.parse(localStorage.getItem('usuario')) || []
 
@@ -200,31 +200,34 @@ document.getElementById('withdraw').addEventListener('click', function () {
     opciones.style.display = 'none'
 });
 realizarRetiroBtn.addEventListener('click', function () {
-    const cantidadRetiro = parseFloat(retiroAmountInput.value)
+    const cantidadRetiro = parseFloat(retiroAmountInput.value);
 
     if (isNaN(cantidadRetiro) || cantidadRetiro <= 0 || saldoUsuarioActual < cantidadRetiro || saldoUsuarioActual - cantidadRetiro < 10000) {
-        alert("Por favor, ingrese una cantidad válida.")
+        alert("Por favor, ingrese una cantidad válida.");
         return;
     }
+
     saldoUsuarioActual -= cantidadRetiro;
-    alert("Retiro exitoso. Saldo restante: " + saldoUsuarioActual)
-    
-    // Actualizar el saldo en el objeto de usuario correspondiente
-    const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
-    if (usuarioActual) {
-        usuarioActual.saldo = saldoUsuarioActual
-        localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
-    }
-
-    agregarMovimiento("Retiro", -cantidadRetiro, usuarioActual)
-
+    document.getElementById('monto-retirado').textContent = cantidadRetiro;
+    comprobanteRetiro.style.display = 'block';
     retiro.style.display = 'none'
-    container.style.display = 'none'
-    opciones.style.display = 'block'
 
-    retiroAmountInput.value = ''
+    const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario);
+
+    if (usuarioActual) {
+        usuarioActual.saldo = saldoUsuarioActual;
+        localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados));
+    }
+    agregarMovimiento("Retiro", -cantidadRetiro, usuarioActual);
+    document.getElementById('retiro-amount').value = ''
+    
 })
-
+document.getElementById('volver-main-menu-comprobante-retiro').addEventListener('click', function (){
+    retiro.style.display = 'none';
+    container.style.display = 'none';
+    opciones.style.display = 'block';
+    comprobanteRetiro.style.display = 'none';
+})
 // Evento para cancelar el retiro
 cancelarRetiroBtn.addEventListener('click', function () {
     retiro.style.display = 'none'
@@ -245,7 +248,6 @@ realizarTransferenciaBtn.addEventListener('click', function () {
     const destinatario = document.getElementById('destinatario-input').value
     const montoTransferido = parseFloat(document.getElementById('monto-transferido-input').value)
 
-    // Verifica que el monto de transferencia sea válido
     if (isNaN(montoTransferido) || montoTransferido <= 10000) {
         alert("Ingrese un monto de transferencia válido.")
     }
@@ -275,7 +277,6 @@ realizarTransferenciaBtn.addEventListener('click', function () {
     comprobanteTransferenciaDiv.style.display = 'block'
     transfer.style.display = 'none'
 
-    // Restablece los valores de los campos
     document.getElementById('destinatario-input').value = ''
     document.getElementById('monto-transferido-input').value = ''
 })
@@ -301,27 +302,37 @@ depositBtn.addEventListener('click', function () {
 
 // Agregar evento al botón "Realizar Consignación"
 realizarConsignacionBtn.addEventListener('click', function () {
-    const montoConsignacion = parseFloat(montoConsignacionInput.value)
+    const montoConsignacion = parseFloat(montoConsignacionInput.value);
 
     if (isNaN(montoConsignacion) || montoConsignacion < 10000) {
-        alert("La consignación debe ser igual o mayor a 10000.")
+        alert("La consignación debe ser igual o mayor a 10000.");
     } else {
-        const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
+        const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario);
 
         if (usuarioActual) {
-            usuarioActual.saldo += montoConsignacion
+            usuarioActual.saldo += montoConsignacion;
 
-            // Pasar el objeto de usuario actual como tercer argumento
             agregarMovimiento("Consignación", montoConsignacion, usuarioActual);
 
             localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados));
             alert(`Consignación exitosa. Nuevo saldo: ${usuarioActual.saldo}`);
-            montoConsignacionInput.value = ''
+            montoConsignacionInput.value = '';
+
+            document.getElementById('monto-consignado').textContent = montoConsignacion;
+            comprobanteConsignacion.style.display = 'block';
+
+            consignarDiv.style.display = 'none';
         } else {
             alert('No se pudo encontrar al usuario actual.');
         }
     }
 })
+document.getElementById('volver-main-menu-comprobante-consignacion').addEventListener('click', function(){
+    comprobanteConsignacion.style.display = 'none';
+    container.style.display = 'none';
+    opciones.style.display = 'block';
+})
+
 // Agregar evento al botón Cancelar Consignación
 cancelarConsignacionBtn.addEventListener('click', function () {
     consignarDiv.style.display = 'none'
