@@ -88,32 +88,34 @@ document.getElementById('registro').addEventListener('submit', function registro
     const passConfirmacion = document.getElementById('pass-confirmacion').value
     const montoApertura = parseFloat(document.getElementById('monto-apertura').value)
 
-
     if (correoRegistro && passRegistro && passConfirmacion) {
+        let todasLasCondicionesCumplidas = true
         if (!userRegistrationRegex.username.test(nombreUsuario)) {
-            alert('El nombre de usuario debe contener solo letras y no debe contener números.')
+            alert('El nombre de usuario debe contener solo letras y no debe contener números.');
+            todasLasCondicionesCumplidas = false
+        } else if (!userRegistrationRegex.email.test(correoRegistro)) {
+            alert('Por favor, ingrese un correo electrónico válido.');
+            todasLasCondicionesCumplidas = false
+        } else if (passRegistro.length < 8 || !userRegistrationRegex.password.test(passRegistro)) {
+            alert('La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula.');
+            todasLasCondicionesCumplidas = false
+        } else if (passRegistro !== passConfirmacion) {
+            alert('Las contraseñas no coinciden. Por favor, inténtelo de nuevo.');
+            todasLasCondicionesCumplidas = false
         }
-        if (!userRegistrationRegex.email.test(correoRegistro)) {
-            alert('Por favor, ingrese un correo electrónico válido.')
-        }
-        if (passRegistro.length < 8 || !userRegistrationRegex.password.test(passRegistro)) {
-            alert('La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula.')
-        }
-        if (passRegistro !== passConfirmacion) {
-            alert('Las contraseñas no coinciden. Por favor, inténtelo de nuevo.')
-        } else {
+        if (todasLasCondicionesCumplidas) {
             const usuarioExistente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoRegistro)
             if (usuarioExistente) {
                 alert('Correo electrónico ya registrado')
                 limpiarRegistro()
-            }  if (montoApertura >= 100000) {
+            } if (montoApertura >= 100000) {
                 const nuevoUsuario = {
                     correoRegistro,
                     passRegistro,
                     nombreUsuario,
                     saldo: montoApertura,
-                    historialMovimientos: [] 
-                };
+                    historialMovimientos: []
+                }
                 usuariosRegistrados.push(nuevoUsuario);
                 localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
                 alert('Bienvenido ' + nombreUsuario + ', inicia sesión para acceder a tu cuenta')
@@ -125,19 +127,17 @@ document.getElementById('registro').addEventListener('submit', function registro
     } else {
         alert('Por favor, complete todos los campos.')
     }
-    limpiarRegistro()
 })
 
 //funcion para inicio de session 
 document.getElementById('login').addEventListener('submit', function loginUsuario() {
     correoUsuario = document.getElementById('email-login').value
     const passUsuario = document.getElementById('pass-login').value
-    
+
     if (correoUsuario && passUsuario) {
         if (!userRegistrationRegex.email.test(correoUsuario)) {
             alert('Por favor, ingrese un correo electrónico válido.')
         }
-
         if (!userRegistrationRegex.password.test(passUsuario)) {
             alert('La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula.')
         }
@@ -175,7 +175,7 @@ function consultarSaldo() {
         const saldoActual = usuarioActual.saldo;
         document.getElementById('nombre-usuario').textContent = ` ${nombreUsuario}`
         document.getElementById('saldo-actual').textContent = ` ${saldoActual}`
-        
+
         agregarMovimiento("Consulta de Saldo", saldoActual, usuarioActual)
 
         document.getElementById('saldo-container').style.display = 'block'
@@ -202,27 +202,25 @@ document.getElementById('withdraw').addEventListener('click', function () {
 realizarRetiroBtn.addEventListener('click', function () {
     const cantidadRetiro = parseFloat(retiroAmountInput.value);
 
-    if (isNaN(cantidadRetiro) || cantidadRetiro <= 0 || saldoUsuarioActual < cantidadRetiro || saldoUsuarioActual - cantidadRetiro < 10000) {
-        alert("Por favor, ingrese una cantidad válida.");
-        return;
+    if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 || cantidadRetiro > saldoUsuarioActual) {
+        alert("Por favor, ingrese una cantidad válida. igual o superior a 10000");
+    } else {
+        saldoUsuarioActual -= cantidadRetiro;
+        document.getElementById('monto-retirado').textContent = cantidadRetiro;
+        comprobanteRetiro.style.display = 'block';
+        retiro.style.display = 'none';
+
+        const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario);
+
+        if (usuarioActual) {
+            usuarioActual.saldo = saldoUsuarioActual;
+            localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados));
+        }
+        agregarMovimiento("Retiro", -cantidadRetiro, usuarioActual);
+        document.getElementById('retiro-amount').value = '';
     }
-
-    saldoUsuarioActual -= cantidadRetiro;
-    document.getElementById('monto-retirado').textContent = cantidadRetiro;
-    comprobanteRetiro.style.display = 'block';
-    retiro.style.display = 'none'
-
-    const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario);
-
-    if (usuarioActual) {
-        usuarioActual.saldo = saldoUsuarioActual;
-        localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados));
-    }
-    agregarMovimiento("Retiro", -cantidadRetiro, usuarioActual);
-    document.getElementById('retiro-amount').value = ''
-    
 })
-document.getElementById('volver-main-menu-comprobante-retiro').addEventListener('click', function (){
+document.getElementById('volver-main-menu-comprobante-retiro').addEventListener('click', function () {
     retiro.style.display = 'none';
     container.style.display = 'none';
     opciones.style.display = 'block';
@@ -248,37 +246,38 @@ realizarTransferenciaBtn.addEventListener('click', function () {
     const destinatario = document.getElementById('destinatario-input').value
     const montoTransferido = parseFloat(document.getElementById('monto-transferido-input').value)
 
-    if (isNaN(montoTransferido) || montoTransferido <= 10000) {
-        alert("Ingrese un monto de transferencia válido.")
+    if (isNaN(montoTransferido) || montoTransferido < 10000) {
+        alert("Ingrese un monto de transferencia válido. igual o superior a 10000")
+    } else {
+        const usuarioRemitente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
+        const usuarioDestinatario = usuariosRegistrados.find(usuario => usuario.correoRegistro === destinatario)
+
+        if (!usuarioDestinatario) {
+            alert("El destinatario no está registrado.")
+        }
+
+        if (usuarioRemitente.saldo < montoTransferido) {
+            alert("Fondos insuficientes para la transferencia.")
+        }
+
+        usuarioRemitente.saldo -= montoTransferido
+        usuarioDestinatario.saldo += montoTransferido
+
+        localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
+
+        alert("Transferencia exitosa.")
+
+        agregarMovimiento("Transferencia realizada a " + destinatario, -montoTransferido, usuarioRemitente)
+        agregarMovimiento("Transferencia recibida de " + correoUsuario, montoTransferido, usuarioDestinatario)
+
+        destinatarioSpan.textContent = destinatario
+        montoTransferidoSpan.textContent = montoTransferido
+        comprobanteTransferenciaDiv.style.display = 'block'
+        transfer.style.display = 'none'
+
+        document.getElementById('destinatario-input').value = ''
+        document.getElementById('monto-transferido-input').value = ''
     }
-    const usuarioRemitente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
-    const usuarioDestinatario = usuariosRegistrados.find(usuario => usuario.correoRegistro === destinatario)
-
-    if (!usuarioDestinatario) {
-        alert("El destinatario no está registrado.")
-    }
-
-    if (usuarioRemitente.saldo < montoTransferido) {
-        alert("Fondos insuficientes para la transferencia.")
-    }
-
-    usuarioRemitente.saldo -= montoTransferido
-    usuarioDestinatario.saldo += montoTransferido
-
-    localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
-
-    alert("Transferencia exitosa.")
-
-    agregarMovimiento("Transferencia realizada a " + destinatario, -montoTransferido, usuarioRemitente)
-    agregarMovimiento("Transferencia recibida de " + correoUsuario, montoTransferido, usuarioDestinatario)
-
-    destinatarioSpan.textContent = destinatario
-    montoTransferidoSpan.textContent = montoTransferido
-    comprobanteTransferenciaDiv.style.display = 'block'
-    transfer.style.display = 'none'
-
-    document.getElementById('destinatario-input').value = ''
-    document.getElementById('monto-transferido-input').value = ''
 })
 // Evento para cancelar la transferencia
 cancelarTransferenciaBtn.addEventListener('click', function () {
@@ -327,7 +326,7 @@ realizarConsignacionBtn.addEventListener('click', function () {
         }
     }
 })
-document.getElementById('volver-main-menu-comprobante-consignacion').addEventListener('click', function(){
+document.getElementById('volver-main-menu-comprobante-consignacion').addEventListener('click', function () {
     comprobanteConsignacion.style.display = 'none';
     container.style.display = 'none';
     opciones.style.display = 'block';
@@ -385,9 +384,9 @@ showTransactionsBtn.addEventListener('click', function mostrarHistorial() {
         botonVolver.textContent = 'Volver al Menú Principal'
         botonVolver.id = 'volver-main-menu-historial'
         botonVolver.classList.add('boton-historial')
-        
+
         const contenedorBoton = document.createElement('div')
-        contenedorBoton.classList.add('centrar-boton') 
+        contenedorBoton.classList.add('centrar-boton')
 
         contenedorBoton.appendChild(botonVolver);
         historialContainer.appendChild(contenedorBoton);

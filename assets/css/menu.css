@@ -53,21 +53,8 @@
 .saldo-container span {
     font-weight: bold;
 }
-/* diseño del historial */
-#historial-container {
-    background-color: #f0f0f0;
-    padding: 20px;
-    border: 1px solid #ccc;
-    max-height: 300px;
-    overflow-y: auto; 
-}
-/* Estilos para los elementos del historial */
-#historial-list div {
-    margin: 5px 0;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-}
 
+/* diseño del historial */
 .container-lista {
     position: relative;
     max-width: 800px;
@@ -75,9 +62,18 @@
     border-radius: 15px;
     padding: 20px 30px 120px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 01);
-    
+    background-color: #f0f0f0;
+    padding: 20px;
+    border: none;
+    max-height: 300px;
+    overflow-y: auto;  
 }
-
+/* Estilos para los elementos del historial */
+#historial-list div {
+    margin: 5px 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
 /* En tu archivo de hoja de estilos CSS */
 .titulo-historial {
     text-align: center; 
