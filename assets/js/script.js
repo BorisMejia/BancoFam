@@ -50,9 +50,9 @@ const usuariosRegistrados = JSON.parse(localStorage.getItem('usuario')) || []
 
 const userRegistrationRegex =
 {
-    username: /^[ A-Za-z]+$/,
+    username: /^[ a-zA-Z]{3,20}$/,
     email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    password: /^(?=.*[A-Z]).{8,}$/
+    password: /^(?=.*[A-Z]).{8,20}$/
 }
 
 //funcion para iniciar sesion
@@ -91,7 +91,7 @@ document.getElementById('registro').addEventListener('submit', function registro
     if (correoRegistro && passRegistro && passConfirmacion) {
         let todasLasCondicionesCumplidas = true
         if (!userRegistrationRegex.username.test(nombreUsuario)) {
-            alert('El nombre de usuario debe contener solo letras y no debe contener números.');
+            alert('El nombre de usuario debe contener minimo 3 letras y un maximo de 20.');
             todasLasCondicionesCumplidas = false
         } else if (!userRegistrationRegex.email.test(correoRegistro)) {
             alert('Por favor, ingrese un correo electrónico válido.');
@@ -103,12 +103,14 @@ document.getElementById('registro').addEventListener('submit', function registro
             alert('Las contraseñas no coinciden. Por favor, inténtelo de nuevo.');
             todasLasCondicionesCumplidas = false
         }
-        if (todasLasCondicionesCumplidas) {
+        if (todasLasCondicionesCumplidas) 
+        {
             const usuarioExistente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoRegistro)
-            if (usuarioExistente) {
+            if (usuarioExistente) 
+            {
                 alert('Correo electrónico ya registrado')
                 limpiarRegistro()
-            } if (montoApertura >= 100000) {
+            }else if (montoApertura >= 100000) {
                 const nuevoUsuario = {
                     correoRegistro,
                     passRegistro,
@@ -120,14 +122,15 @@ document.getElementById('registro').addEventListener('submit', function registro
                 localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
                 alert('Bienvenido ' + nombreUsuario + ', inicia sesión para acceder a tu cuenta')
                 limpiarRegistro()
-            } else {
+            }else {
                 alert('La apertura de cuenta requiere un mínimo de 100,000. Tu saldo actual es insuficiente.')
             }
-        }
-    } else {
+        } 
+    }else {
         alert('Por favor, complete todos los campos.')
-    }
-})
+    } 
+}
+)
 
 //funcion para inicio de session 
 document.getElementById('login').addEventListener('submit', function loginUsuario() {
@@ -143,10 +146,10 @@ document.getElementById('login').addEventListener('submit', function loginUsuari
         }
         const usuario = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario && usuario.passRegistro === passUsuario)
         if (usuario) {
-            iniciarSesion()
-            limpiarLogin()
             correoUsuario = correoUsuario;
             saldoUsuarioActual = usuario.saldo
+            iniciarSesion()
+            limpiarLogin()
         } else {
             intentosFallidos++
             if (intentosFallidos > 3) {
@@ -163,7 +166,7 @@ document.getElementById('login').addEventListener('submit', function loginUsuari
         alert("Por favor, complete todos los campos.")
     }
 })
-//Consultar saldo 
+//funcion para consultar saldo 
 function consultarSaldo() {
     container.style.display = 'none'
     opciones.style.display = 'none'
@@ -204,7 +207,7 @@ realizarRetiroBtn.addEventListener('click', function () {
 
     if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 || cantidadRetiro > saldoUsuarioActual || saldoUsuarioActual - cantidadRetiro < 10000) {
         alert("Recuerde que el retiro debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000");
-    }else {
+    } else {
         saldoUsuarioActual -= cantidadRetiro;
         document.getElementById('monto-retirado').textContent = cantidadRetiro;
         comprobanteRetiro.style.display = 'block';
@@ -250,24 +253,24 @@ realizarTransferenciaBtn.addEventListener('click', function () {
 
     if (isNaN(montoTransferido) || montoTransferido < 10000) {
         alert("Recuerde que la transferencia debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000")
-    } if (!usuarioDestinatario) {
+    } else if (!usuarioDestinatario) {
         alert("El destinatario no está registrado.")
-    }else if (saldoUsuarioActual - montoTransferido < 10000) {
+    } else if (saldoUsuarioActual - montoTransferido < 10000) {
         alert("Fondos insuficientes para la transferencia.")
+    } else if (usuarioRemitente === usuarioDestinatario) {
+        alert("No puedes hacer una trasferencia a tu misma cuenta, para eso esta la consignacion.")
     } else {
-    
+        alert("Transferencia exitosa.")
         usuarioRemitente.saldo -= montoTransferido
         usuarioDestinatario.saldo += montoTransferido
+        destinatarioSpan.textContent = destinatario
+        montoTransferidoSpan.textContent = montoTransferido
 
         localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
-
-        alert("Transferencia exitosa.")
 
         agregarMovimiento("Transferencia realizada a " + destinatario, -montoTransferido, usuarioRemitente)
         agregarMovimiento("Transferencia recibida de " + correoUsuario, montoTransferido, usuarioDestinatario)
 
-        destinatarioSpan.textContent = destinatario
-        montoTransferidoSpan.textContent = montoTransferido
         comprobanteTransferenciaDiv.style.display = 'block'
         transfer.style.display = 'none'
 
@@ -307,8 +310,6 @@ realizarConsignacionBtn.addEventListener('click', function () {
         if (usuarioActual) {
             usuarioActual.saldo += montoConsignacion;
 
-            agregarMovimiento("Consignación", montoConsignacion, usuarioActual);
-
             localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados));
             alert(`Consignación exitosa. Nuevo saldo: ${usuarioActual.saldo}`);
             montoConsignacionInput.value = '';
@@ -316,6 +317,7 @@ realizarConsignacionBtn.addEventListener('click', function () {
             document.getElementById('monto-consignado').textContent = montoConsignacion;
             comprobanteConsignacion.style.display = 'block';
 
+            agregarMovimiento("Consignación", montoConsignacion, usuarioActual);
             consignarDiv.style.display = 'none';
         } else {
             alert('No se pudo encontrar al usuario actual.');
