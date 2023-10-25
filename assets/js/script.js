@@ -174,7 +174,7 @@ function consultarSaldo() {
         const nombreUsuario = usuarioActual.nombreUsuario;
         const saldoActual = usuarioActual.saldo;
         document.getElementById('nombre-usuario').textContent = ` ${nombreUsuario}`
-        document.getElementById('saldo-actual').textContent = ` ${saldoActual}`
+        document.getElementById('saldo-actual').textContent = ` $${saldoActual}`
 
         agregarMovimiento("Consulta de Saldo", saldoActual, usuarioActual)
 
@@ -202,9 +202,9 @@ document.getElementById('withdraw').addEventListener('click', function () {
 realizarRetiroBtn.addEventListener('click', function () {
     const cantidadRetiro = parseFloat(retiroAmountInput.value);
 
-    if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 || cantidadRetiro > saldoUsuarioActual) {
-        alert("Por favor, ingrese una cantidad válida. igual o superior a 10000");
-    } else {
+    if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 || cantidadRetiro > saldoUsuarioActual || saldoUsuarioActual - cantidadRetiro < 10000) {
+        alert("Recuerde que el retiro debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000");
+    }else {
         saldoUsuarioActual -= cantidadRetiro;
         document.getElementById('monto-retirado').textContent = cantidadRetiro;
         comprobanteRetiro.style.display = 'block';
@@ -245,21 +245,17 @@ transferBtn.addEventListener('click', function () {
 realizarTransferenciaBtn.addEventListener('click', function () {
     const destinatario = document.getElementById('destinatario-input').value
     const montoTransferido = parseFloat(document.getElementById('monto-transferido-input').value)
+    const usuarioRemitente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
+    const usuarioDestinatario = usuariosRegistrados.find(usuario => usuario.correoRegistro === destinatario)
 
     if (isNaN(montoTransferido) || montoTransferido < 10000) {
-        alert("Ingrese un monto de transferencia válido. igual o superior a 10000")
+        alert("Recuerde que la transferencia debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000")
+    } if (!usuarioDestinatario) {
+        alert("El destinatario no está registrado.")
+    }else if (saldoUsuarioActual - montoTransferido < 10000) {
+        alert("Fondos insuficientes para la transferencia.")
     } else {
-        const usuarioRemitente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
-        const usuarioDestinatario = usuariosRegistrados.find(usuario => usuario.correoRegistro === destinatario)
-
-        if (!usuarioDestinatario) {
-            alert("El destinatario no está registrado.")
-        }
-
-        if (usuarioRemitente.saldo < montoTransferido) {
-            alert("Fondos insuficientes para la transferencia.")
-        }
-
+    
         usuarioRemitente.saldo -= montoTransferido
         usuarioDestinatario.saldo += montoTransferido
 
