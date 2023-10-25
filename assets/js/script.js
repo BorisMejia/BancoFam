@@ -47,7 +47,6 @@ const montoConsignacionInput = document.getElementById('monto-consignacion')
 const comprobanteConsignacion = document.getElementById('comprobante-consignacion')
 
 const usuariosRegistrados = JSON.parse(localStorage.getItem('usuario')) || []
-
 const userRegistrationRegex =
 {
     username: /^[ a-zA-Z]{3,20}$/,
@@ -91,16 +90,16 @@ document.getElementById('registro').addEventListener('submit', function registro
     if (correoRegistro && passRegistro && passConfirmacion) {
         let todasLasCondicionesCumplidas = true
         if (!userRegistrationRegex.username.test(nombreUsuario)) {
-            alert('El nombre de usuario debe contener minimo 3 letras y un maximo de 20.');
+            alert('El nombre de usuario debe contener minimo 3 letras y un maximo de 20.')
             todasLasCondicionesCumplidas = false
         } else if (!userRegistrationRegex.email.test(correoRegistro)) {
-            alert('Por favor, ingrese un correo electrónico válido.');
+            alert('Por favor, ingrese un correo electrónico válido.')
             todasLasCondicionesCumplidas = false
         } else if (passRegistro.length < 8 || !userRegistrationRegex.password.test(passRegistro)) {
-            alert('La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula.');
+            alert('La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula.')
             todasLasCondicionesCumplidas = false
         } else if (passRegistro !== passConfirmacion) {
-            alert('Las contraseñas no coinciden. Por favor, inténtelo de nuevo.');
+            alert('Las contraseñas no coinciden. Por favor, inténtelo de nuevo.')
             todasLasCondicionesCumplidas = false
         }
         if (todasLasCondicionesCumplidas) 
@@ -118,7 +117,7 @@ document.getElementById('registro').addEventListener('submit', function registro
                     saldo: montoApertura,
                     historialMovimientos: []
                 }
-                usuariosRegistrados.push(nuevoUsuario);
+                usuariosRegistrados.push(nuevoUsuario)
                 localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
                 alert('Bienvenido ' + nombreUsuario + ', inicia sesión para acceder a tu cuenta')
                 limpiarRegistro()
@@ -203,15 +202,15 @@ document.getElementById('withdraw').addEventListener('click', function () {
     opciones.style.display = 'none'
 });
 realizarRetiroBtn.addEventListener('click', function () {
-    const cantidadRetiro = parseFloat(retiroAmountInput.value);
+    const cantidadRetiro = parseFloat(retiroAmountInput.value)
 
     if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 || cantidadRetiro > saldoUsuarioActual || saldoUsuarioActual - cantidadRetiro < 10000) {
         alert("Recuerde que el retiro debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000");
     } else {
-        saldoUsuarioActual -= cantidadRetiro;
+        saldoUsuarioActual -= cantidadRetiro
         document.getElementById('monto-retirado').textContent = cantidadRetiro;
-        comprobanteRetiro.style.display = 'block';
-        retiro.style.display = 'none';
+        comprobanteRetiro.style.display = 'block'
+        retiro.style.display = 'none'
 
         const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario);
 
@@ -219,15 +218,15 @@ realizarRetiroBtn.addEventListener('click', function () {
             usuarioActual.saldo = saldoUsuarioActual;
             localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados));
         }
-        agregarMovimiento("Retiro", -cantidadRetiro, usuarioActual);
-        document.getElementById('retiro-amount').value = '';
+        agregarMovimiento("Retiro", -cantidadRetiro, usuarioActual)
+        document.getElementById('retiro-amount').value = ''
     }
 })
 document.getElementById('volver-main-menu-comprobante-retiro').addEventListener('click', function () {
-    retiro.style.display = 'none';
-    container.style.display = 'none';
-    opciones.style.display = 'block';
-    comprobanteRetiro.style.display = 'none';
+    retiro.style.display = 'none'
+    container.style.display = 'none'
+    opciones.style.display = 'block'
+    comprobanteRetiro.style.display = 'none'
 })
 // Evento para cancelar el retiro
 cancelarRetiroBtn.addEventListener('click', function () {
@@ -242,7 +241,7 @@ transferBtn.addEventListener('click', function () {
     comprobanteTransferenciaDiv.style.display = 'none'
     container.style.display = 'none'
     opciones.style.display = 'none'
-});
+})
 
 // Evento para realizar la transferencia
 realizarTransferenciaBtn.addEventListener('click', function () {
@@ -251,13 +250,16 @@ realizarTransferenciaBtn.addEventListener('click', function () {
     const usuarioRemitente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
     const usuarioDestinatario = usuariosRegistrados.find(usuario => usuario.correoRegistro === destinatario)
 
-    if (isNaN(montoTransferido) || montoTransferido < 10000) {
+    if (isNaN(montoTransferido) || montoTransferido < 10000)
+    {
         alert("Recuerde que la transferencia debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000")
     } else if (!usuarioDestinatario) {
         alert("El destinatario no está registrado.")
-    } else if (saldoUsuarioActual - montoTransferido < 10000) {
+    } else if (saldoUsuarioActual - montoTransferido < 10000)
+     {
         alert("Fondos insuficientes para la transferencia.")
-    } else if (usuarioRemitente === usuarioDestinatario) {
+    } else if (usuarioRemitente === usuarioDestinatario) 
+    {
         alert("No puedes hacer una trasferencia a tu misma cuenta, para eso esta la consignacion.")
     } else {
         alert("Transferencia exitosa.")
@@ -284,8 +286,8 @@ cancelarTransferenciaBtn.addEventListener('click', function () {
     container.style.display = 'none'
     opciones.style.display = 'block'
 
-    document.getElementById('destinatario').value = '';
-    document.getElementById('monto-transferido').value = '';
+    document.getElementById('destinatario').value = ''
+    document.getElementById('monto-transferido').value = ''
 })
 
 volverMainMenuComprobanteBtn.addEventListener('click', function () {
@@ -303,31 +305,31 @@ realizarConsignacionBtn.addEventListener('click', function () {
     const montoConsignacion = parseFloat(montoConsignacionInput.value);
 
     if (isNaN(montoConsignacion) || montoConsignacion < 10000) {
-        alert("La consignación debe ser igual o mayor a 10000.");
+        alert("La consignación debe ser igual o mayor a 10000.")
     } else {
-        const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario);
+        const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
 
         if (usuarioActual) {
-            usuarioActual.saldo += montoConsignacion;
+            usuarioActual.saldo += montoConsignacion
 
-            localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados));
-            alert(`Consignación exitosa. Nuevo saldo: ${usuarioActual.saldo}`);
-            montoConsignacionInput.value = '';
+            localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
+            alert(`Consignación exitosa. Nuevo saldo: ${usuarioActual.saldo}`)
+            montoConsignacionInput.value = ''
 
             document.getElementById('monto-consignado').textContent = montoConsignacion;
-            comprobanteConsignacion.style.display = 'block';
+            comprobanteConsignacion.style.display = 'block'
 
-            agregarMovimiento("Consignación", montoConsignacion, usuarioActual);
-            consignarDiv.style.display = 'none';
+            agregarMovimiento("Consignación", montoConsignacion, usuarioActual)
+            consignarDiv.style.display = 'none'
         } else {
-            alert('No se pudo encontrar al usuario actual.');
+            alert('No se pudo encontrar al usuario actual.')
         }
     }
 })
 document.getElementById('volver-main-menu-comprobante-consignacion').addEventListener('click', function () {
-    comprobanteConsignacion.style.display = 'none';
-    container.style.display = 'none';
-    opciones.style.display = 'block';
+    comprobanteConsignacion.style.display = 'none'
+    container.style.display = 'none'
+    opciones.style.display = 'block'
 })
 
 // Agregar evento al botón Cancelar Consignación
@@ -343,9 +345,9 @@ function agregarMovimiento(tipo, valor, usuario) {
 
     if (usuario) {
         if (!usuario.historialMovimientos) {
-            usuario.historialMovimientos = [];
+            usuario.historialMovimientos = []
         }
-        usuario.historialMovimientos.push(movimiento);
+        usuario.historialMovimientos.push(movimiento)
 
         // Guarda el usuario actual en el localStorage después de actualizar su historial
         localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados));
@@ -357,7 +359,7 @@ showTransactionsBtn.addEventListener('click', function mostrarHistorial() {
     const usuarioActual = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
 
     if (usuarioActual) {
-        const historial = usuarioActual.historialMovimientos;
+        const historial = usuarioActual.historialMovimientos
 
         historialContainer.innerHTML = ''
 
