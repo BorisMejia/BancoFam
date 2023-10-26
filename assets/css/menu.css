@@ -76,12 +76,15 @@
 }
 /* En tu archivo de hoja de estilos CSS */
 .titulo-historial {
+   /*  position: sticky;
+    top: 0; */
     text-align: center; 
     padding: 10px 0; 
     background-color: #F5FCCD; 
     font-weight: bold; 
     margin-bottom: 20px;
 }
+
 .centrar-boton {
     display: flex;
     justify-content: center;
