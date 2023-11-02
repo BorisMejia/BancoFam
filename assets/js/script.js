@@ -1,7 +1,7 @@
 //Funcionalidad abrir y cerrar login 
 const contenedor = document.querySelector(".container"),
-    loginHeader = document.querySelector(".container-login header")
-registroHeader = document.querySelector(".container-registro header")
+    loginHeader = document.querySelector(".container-login header"),
+    registroHeader = document.querySelector(".container-registro header")
 
 registroHeader.addEventListener('click', () => {
     contenedor.classList.add('active')
@@ -90,26 +90,25 @@ document.getElementById('registro').addEventListener('submit', function registro
     if (correoRegistro && passRegistro && passConfirmacion) {
         let todasLasCondicionesCumplidas = true
         if (!userRegistrationRegex.username.test(nombreUsuario)) {
-            alert('El nombre de usuario debe contener minimo 3 letras y un maximo de 20.')
+            nombreRegexError()
             todasLasCondicionesCumplidas = false
         } else if (!userRegistrationRegex.email.test(correoRegistro)) {
-            alert('Por favor, ingrese un correo electrónico válido.')
+            correoRegistroRegex()
             todasLasCondicionesCumplidas = false
-        } else if (passRegistro.length < 8 || !userRegistrationRegex.password.test(passRegistro)) {
-            alert('La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula.')
+        } else if (!userRegistrationRegex.password.test(passRegistro)) {
+            passRegistroRegex()
             todasLasCondicionesCumplidas = false
         } else if (passRegistro !== passConfirmacion) {
-            alert('Las contraseñas no coinciden. Por favor, inténtelo de nuevo.')
+            passConfirmacionRegex()
             todasLasCondicionesCumplidas = false
         }
-        if (todasLasCondicionesCumplidas) 
-        {
+        if (todasLasCondicionesCumplidas) {
             const usuarioExistente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoRegistro)
-            if (usuarioExistente) 
-            {
-                alert('Correo electrónico ya registrado')
+            if (usuarioExistente) {
+                usuarioExistenteRegistro()
                 limpiarRegistro()
-            }else if (montoApertura >= 100000) {
+                contenedor.classList.add('active')
+            } else if (montoApertura >= 100000) {
                 const nuevoUsuario = {
                     correoRegistro,
                     passRegistro,
@@ -119,15 +118,14 @@ document.getElementById('registro').addEventListener('submit', function registro
                 }
                 usuariosRegistrados.push(nuevoUsuario)
                 localStorage.setItem('usuario', JSON.stringify(usuariosRegistrados))
-                alert('Bienvenido ' + nombreUsuario + ', inicia sesión para acceder a tu cuenta')
+                usuarioRegistrado()
                 limpiarRegistro()
-            }else {
-                alert('La apertura de cuenta requiere un mínimo de 100,000. Tu saldo actual es insuficiente.')
+                contenedor.classList.add('active')
+            } else {
+                montoAperturaMalo()
             }
-        } 
-    }else {
-        alert('Por favor, complete todos los campos.')
-    } 
+        }
+    }
 }
 )
 
@@ -138,31 +136,31 @@ document.getElementById('login').addEventListener('submit', function loginUsuari
 
     if (correoUsuario && passUsuario) {
         if (!userRegistrationRegex.email.test(correoUsuario)) {
-            alert('Por favor, ingrese un correo electrónico válido.')
-        }
-        if (!userRegistrationRegex.password.test(passUsuario)) {
-            alert('La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula.')
+            correoUsuarioRegex()
+        } else if (!userRegistrationRegex.password.test(passUsuario)) {
+            contraseñaUsuarioRegex()
         }
         const usuario = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario && usuario.passRegistro === passUsuario)
         if (usuario) {
-            correoUsuario = correoUsuario;
-            saldoUsuarioActual = usuario.saldo
-            iniciarSesion()
-            limpiarLogin()
+            setTimeout(() => {
+                correoUsuario = correoUsuario;
+                saldoUsuarioActual = usuario.saldo
+                iniciarSesion()
+                limpiarLogin()
+            },1000)
+
         } else {
             intentosFallidos++
             if (intentosFallidos > 3) {
-                alert("Has alcanzado el máximo de intentos fallidos. El formulario se bloqueará.")
+                intentoFallidos()
                 document.getElementById('email-login').disabled = true
                 document.getElementById('pass-login').disabled = true
                 document.getElementById('btnIniciar').disabled = true
             } else {
-                alert("Credenciales incorrectas. Intento fallido #" + intentosFallidos)
+                numeroIntentosFallidos()
             }
-            limpiarLogin()
+            correoNoRegistrado()
         }
-    } else {
-        alert("Por favor, complete todos los campos.")
     }
 })
 //funcion para consultar saldo 
@@ -204,9 +202,15 @@ document.getElementById('withdraw').addEventListener('click', function () {
 realizarRetiroBtn.addEventListener('click', function () {
     const cantidadRetiro = parseFloat(retiroAmountInput.value)
 
-    if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 || cantidadRetiro > saldoUsuarioActual || saldoUsuarioActual - cantidadRetiro < 10000) {
-        alert("Recuerde que el retiro debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000");
-    } else {
+    if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 ) {
+        cantidadRetiroMenor()
+    }else if(saldoUsuarioActual - cantidadRetiro < 10000){
+        saldoActualMenor()
+    }
+    else if(cantidadRetiro > saldoUsuarioActual){
+        saldoInsuficiente()
+    }
+    else {
         saldoUsuarioActual -= cantidadRetiro
         document.getElementById('monto-retirado').textContent = cantidadRetiro;
         comprobanteRetiro.style.display = 'block'
@@ -250,16 +254,13 @@ realizarTransferenciaBtn.addEventListener('click', function () {
     const usuarioRemitente = usuariosRegistrados.find(usuario => usuario.correoRegistro === correoUsuario)
     const usuarioDestinatario = usuariosRegistrados.find(usuario => usuario.correoRegistro === destinatario)
 
-    if (isNaN(montoTransferido) || montoTransferido < 10000)
-    {
-        alert("Recuerde que la transferencia debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000")
+    if (isNaN(montoTransferido) || montoTransferido < 10000) {
+        montoTransferidoMenor()
     } else if (!usuarioDestinatario) {
-        alert("El destinatario no está registrado.")
-    } else if (saldoUsuarioActual - montoTransferido < 10000)
-     {
+        usuarioNoRegistrado()
+    } else if (saldoUsuarioActual - montoTransferido < 10000) {
         alert("Fondos insuficientes para la transferencia.")
-    } else if (usuarioRemitente === usuarioDestinatario) 
-    {
+    } else if (usuarioRemitente === usuarioDestinatario) {
         alert("No puedes hacer una trasferencia a tu misma cuenta, para eso esta la consignacion.")
     } else {
         alert("Transferencia exitosa.")
