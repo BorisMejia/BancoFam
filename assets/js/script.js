@@ -202,9 +202,15 @@ document.getElementById('withdraw').addEventListener('click', function () {
 realizarRetiroBtn.addEventListener('click', function () {
     const cantidadRetiro = parseFloat(retiroAmountInput.value)
 
-    if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 || cantidadRetiro > saldoUsuarioActual || saldoUsuarioActual - cantidadRetiro < 10000) {
-        alert("Recuerde que el retiro debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000");
-    }else {
+    if (isNaN(cantidadRetiro) || cantidadRetiro < 10000 ) {
+        cantidadRetiroMenor()
+    }else if(saldoUsuarioActual - cantidadRetiro < 10000){
+        saldoActualMenor()
+    }
+    else if(cantidadRetiro > saldoUsuarioActual){
+        saldoInsuficiente()
+    }
+    else {
         saldoUsuarioActual -= cantidadRetiro
         document.getElementById('monto-retirado').textContent = cantidadRetiro;
         comprobanteRetiro.style.display = 'block'
@@ -249,9 +255,9 @@ realizarTransferenciaBtn.addEventListener('click', function () {
     const usuarioDestinatario = usuariosRegistrados.find(usuario => usuario.correoRegistro === destinatario)
 
     if (isNaN(montoTransferido) || montoTransferido < 10000) {
-        alert("Recuerde que la transferencia debe ser igual o superior a 10000 y no puede superar el saldo actual ni dejar un saldo menor a 10000")
+        montoTransferidoMenor()
     } else if (!usuarioDestinatario) {
-        alert("El destinatario no está registrado.")
+        usuarioNoRegistrado()
     } else if (saldoUsuarioActual - montoTransferido < 10000) {
         alert("Fondos insuficientes para la transferencia.")
     } else if (usuarioRemitente === usuarioDestinatario) {

@@ -121,3 +121,57 @@ function correoNoRegistrado(){
         timer: 5000
       })
 }
+function cantidadRetiroMenor(){
+    Swal.fire({
+        icon: 'info',
+        title: 'Cantidad de retiro incorrecta',
+        text: 'La cantidad de retiro debe ser igual o superior a 10000',
+        width: '40%',
+        background: '#F5FCCD',
+        backdrop: true,
+        timer: 5000
+      })
+}
+function saldoActualMenor(){
+    Swal.fire({
+        icon: 'info',
+        title: 'Cantidad de retiro incorrecta',
+        text: 'No puedes retirar esta cantidad',
+        width: '40%',
+        background: '#F5FCCD',
+        backdrop: true,
+        timer: 5000
+      })
+}
+function saldoInsuficiente(){
+    Swal.fire({
+        icon: 'info',
+        title: 'Cantidad de retiro incorrecta',
+        text: 'Saldo insuficiente, asegurese de tener la cantidad correcta en la cuenta',
+        width: '40%',
+        background: '#F5FCCD',
+        backdrop: true,
+        timer: 5000
+      })
+}
+function montoTransferidoMenor(){
+    Swal.fire({
+        icon: 'info',
+        title: 'Cantidad de trasferencia incorrecta',
+        text: 'Recuerde que la transferencia debe ser igual o superior a 10000',
+        width: '40%',
+        background: '#F5FCCD',
+        backdrop: true,
+        timer: 5000
+      })
+}
+function usuarioNoRegistrado(){
+    Swal.fire({
+        icon: 'info',
+        title: 'El destinatario no está registrado',
+        width: '40%',
+        background: '#F5FCCD',
+        backdrop: true,
+        timer: 5000
+      })
+}
